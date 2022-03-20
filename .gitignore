@@ -1,6 +1,7 @@
 # Remove config and batch files
 *.bat
 *.old
+exoplanet/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

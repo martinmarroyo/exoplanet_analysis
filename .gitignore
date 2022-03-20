@@ -1,6 +1,6 @@
 # Remove config and batch files
-.bat
-.old
+*.bat
+*.old
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

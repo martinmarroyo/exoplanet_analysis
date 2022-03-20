@@ -86,5 +86,6 @@ if inserts['updated'].max() >  latest_date['updated'].max():
 
 
 
+
 driver.close()
 driver.quit()

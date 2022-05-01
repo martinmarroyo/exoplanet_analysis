@@ -81,10 +81,11 @@ if inserts['updated'].max() >  latest_date['updated'].max():
                             chunksize=1000,
                             method='multi')
             logging.info('New data has been inserted')
-            # Update dim and fact tables
+            # Update dim and fact tables, refresh views
             conn.execute(text("SELECT exoplanet.update_dim_planet();"))
             conn.execute(text("SELECT exoplanet.update_dim_star();"))
             conn.execute(text("SELECT exoplanet.insert_fact_planet_star();"))
+            conn.execute(text("REFRESH MATERIALIZED VIEW exoplanet.vw_current_star_detail;"))
             logging.info('Dimension and fact tables have been updated')
             
     except Exception as err:

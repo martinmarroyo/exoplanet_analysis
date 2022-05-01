@@ -3,7 +3,7 @@ SELECT
 	dim_planet.planet_key
 	,dim_planet.planet_name
 	,dim_star.star_name
-	AS planet_star_name
+	AS host_star
 	,dim_planet.planet_status
 	,dim_planet.discovered
 	,dim_planet.publication
@@ -99,5 +99,6 @@ INNER JOIN
 ORDER BY
 	dim_planet.planet_key;
 	
-CREATE INDEX idx_exoplanet_status ON exoplanet.vw_current_exoplanet_detail(planet_status,discovered,planet_star_name);
+CREATE INDEX idx_exoplanet_status ON exoplanet.vw_current_exoplanet_detail(planet_status,discovered,host_star);
 CREATE INDEX idx_exoplanet_name ON exoplanet.vw_current_exoplanet_detail(planet_name);
+CREATE INDEX idx_exoplanet_star ON exoplanet.vw_current_exoplanet_detail(host_star);

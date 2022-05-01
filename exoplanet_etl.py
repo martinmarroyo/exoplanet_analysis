@@ -86,6 +86,7 @@ if inserts['updated'].max() >  latest_date['updated'].max():
             conn.execute(text("SELECT exoplanet.update_dim_star();"))
             conn.execute(text("SELECT exoplanet.insert_fact_planet_star();"))
             conn.execute(text("REFRESH MATERIALIZED VIEW exoplanet.vw_current_star_detail;"))
+            conn.execute(text("REFRESH MATERIALIZED VIEW exoplanet.vw_current_exoplanet_detail;"))
             logging.info('Dimension and fact tables have been updated')
             
     except Exception as err:

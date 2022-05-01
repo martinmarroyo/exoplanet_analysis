@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from time import sleep
 from dotenv import dotenv_values
+from sqlalchemy import text
 import pandas as pd
 import psycopg2
 import sqlalchemy
@@ -61,7 +62,7 @@ exoplanet_data['updated'] = (pd.to_datetime(exoplanet_data['updated'])
                                .apply(lambda row: row.date()))
 last_updated = exoplanet_data['updated'].max()
 inserts = exoplanet_data[exoplanet_data['updated'] == last_updated]
-engine = sqlalchemy.create_engine(f"postgresql://{conf['USER']}"
+engine = sqlalchemy.create_engine(f"postgresql+psycopg2://{conf['USER']}"
                                 + f":{conf['PASS']}@{conf['HOST']}" 
                                 + f":{conf['PORT']}/{conf['DB_NAME']}")
 # Add new data if it is newer than the last updated date
@@ -71,15 +72,23 @@ latest_date = pd.read_sql("""SELECT MAX(updated::DATE) AS updated
 
 if inserts['updated'].max() >  latest_date['updated'].max():
     try:
-        inserts.to_sql('exoplanet_data',
-                        engine,
-                        schema='exoplanet',
-                        if_exists='append',
-                        chunksize=1000,
-                        method='multi')
-        logging.info('New data has been inserted')
+        with engine.begin() as conn:
+            inserts.to_sql('exoplanet_data',
+                            conn,
+                            schema='exoplanet',
+                            if_exists='append',
+                            index=False,
+                            chunksize=1000,
+                            method='multi')
+            logging.info('New data has been inserted')
+            # Update dim and fact tables
+            conn.execute(text("SELECT exoplanet.update_dim_planet();"))
+            conn.execute(text("SELECT exoplanet.update_dim_star();"))
+            conn.execute(text("SELECT exoplanet.insert_fact_planet_star();"))
+            logging.info('Dimension and fact tables have been updated')
+            
     except Exception as err:
-        logging.exception("Error occurred while inserting to db: ")
+        logging.exception("Error occurred while inserting to db")
         raise
         
         

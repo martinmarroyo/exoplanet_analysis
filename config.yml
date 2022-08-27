@@ -1,0 +1,9 @@
+DATA_PATH: raw_data/exoplanet.eu_catalog.csv
+DOWNLOAD_DIR: raw_data
+EXOPLANET_SITE: http://exoplanet.eu/catalog/all_fields/#
+DRIVER: psycopg2
+DIALECT: postgresql
+USER: citizen_scientist
+PASS: reachforthestars
+PORT: 5432
+DB_NAME: exoplanet

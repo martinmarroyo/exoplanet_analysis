@@ -19,11 +19,11 @@ WITH inserts AS (
 		,'t'::BOOLEAN AS row_current
 		,NOW()::DATE AS current_as_of
 	FROM
-		exoplanet.exoplanet_data
+		exoplanet.raw_exoplanet_data
 	WHERE
 		star_name IS NOT NULL
 		AND updated = (SELECT MAX(updated)
-					   FROM exoplanet.exoplanet_data)
+					   FROM exoplanet.raw_exoplanet_data)
 )
 , updates AS (
 	-- Expire old rows

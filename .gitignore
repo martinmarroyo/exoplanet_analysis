@@ -23,6 +23,7 @@ lib64/
 parts/
 sdist/
 var/
+venv/
 wheels/
 pip-wheel-metadata/
 share/python-wheels/
@@ -131,3 +132,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+etl/logs/*.log
+venv
+venv/*

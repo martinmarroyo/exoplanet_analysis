@@ -13,8 +13,8 @@ fi
 echo "Initializing Exoplanet Database..."
 SCHEMA_CREATE="CREATE SCHEMA IF NOT EXISTS exoplanet"
 CROSSTAB="CREATE EXTENSION tablefunc"
-psql -U citizen_scientist -d exoplanet -c "${SCHEMA_CREATE}"
-psql -U citizen_scientist -d exoplanet -c "${CROSSTAB}"
+psql -qtAX -U citizen_scientist -d exoplanet -c "${SCHEMA_CREATE}"
+psql -qtAX -U citizen_scientist -d exoplanet -c "${CROSSTAB}"
 echo "Exoplanet schema has been created"
 
 # Create Tables
@@ -23,7 +23,7 @@ echo "Creating tables..."
 for script in $TABLE_SCRIPTS
     do
         psql \
-        -U citizen_scientist \
+        -qtAX -U citizen_scientist \
         -d exoplanet $(for script in $(ls $TABLE_SCRIPTS); do echo -f $TABLE_SCRIPTS/$script; done)
     done
 echo "Tables have been successfully created"
@@ -34,7 +34,7 @@ echo "Initializing functions..."
 for script in $FUNC_SCRIPTS
     do
         psql \
-        -U citizen_scientist \
+        -qtAX -U citizen_scientist \
         -d exoplanet $(for script in $(ls $FUNC_SCRIPTS); do echo -f $FUNC_SCRIPTS/$script; done)
     done
 echo "Functions have been initialized"
@@ -45,7 +45,7 @@ echo "Creating views..."
 for script in $VIEW_SCRIPTS
     do
         psql \
-        -U citizen_scientist \
+        -qtAX -U citizen_scientist \
         -d exoplanet $(for script in $(ls $VIEW_SCRIPTS); do echo -f $VIEW_SCRIPTS/$script; done)
     done
 echo "Views have been created successfully"

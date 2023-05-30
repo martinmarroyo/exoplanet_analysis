@@ -1,4 +1,4 @@
-CREATE VIEW exoplanet.vw_exoplanet_molecular_makeup AS
+CREATE OR REPLACE VIEW exoplanet.vw_exoplanet_molecular_makeup AS
 SELECT *
 FROM CROSSTAB(
 	$$

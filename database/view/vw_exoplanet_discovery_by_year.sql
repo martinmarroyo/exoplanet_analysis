@@ -1,4 +1,4 @@
-CREATE VIEW exoplanet.vw_exoplanet_discovery_by_year AS
+CREATE OR REPLACE VIEW exoplanet.vw_exoplanet_discovery_by_year AS
 SELECT discovered,COUNT(planet_name) AS total_planets
 FROM exoplanet.dim_planet
 WHERE row_current AND discovered<>9999

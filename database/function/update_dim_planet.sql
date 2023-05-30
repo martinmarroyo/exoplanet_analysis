@@ -23,7 +23,7 @@ WITH inserts AS (
 	FROM 
 		exoplanet.raw_exoplanet_data
 	WHERE 
-		updated = (SELECT MAX(updated::DATE)
+		updated::DATE = (SELECT MAX(updated::DATE)
 				   FROM exoplanet.raw_exoplanet_data)
 )
 , updates AS (

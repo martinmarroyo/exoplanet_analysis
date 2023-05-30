@@ -1,4 +1,4 @@
-CREATE VIEW exoplanet.vw_total_stars_by_age_group AS
+CREATE OR REPLACE VIEW exoplanet.vw_total_stars_by_age_group AS
 WITH star_age AS (
 	SELECT ROUND(star_age) AS star_age_est,count(star_age)
 	FROM exoplanet.dim_star

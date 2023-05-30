@@ -1,0 +1,22 @@
+version: '3'
+services:
+  ingestion:
+    build: 
+      context: ./ingestion
+      dockerfile: Dockerfile
+    container_name: ingestion
+    ports:
+      - "4444:4444"
+    networks:
+      - local
+    volumes:
+      - ./ingestion:/src/
+  database:
+    build: 
+      context: ./database
+      dockerfile: Dockerfile
+    container_name: db2
+    networks:
+      - local
+networks:
+  local:

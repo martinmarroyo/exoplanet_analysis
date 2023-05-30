@@ -1,4 +1,4 @@
-CREATE VIEW exoplanet.vw_exoplanet_discoveries_by_detection_type AS
+CREATE OR REPLACE VIEW exoplanet.vw_exoplanet_discoveries_by_detection_type AS
 SELECT detection_type,COUNT(planet_name) AS total_planets
 FROM exoplanet.dim_planet
 WHERE row_current AND detection_type IS NOT NULL

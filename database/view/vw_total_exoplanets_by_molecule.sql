@@ -1,4 +1,4 @@
-CREATE VIEW exoplanet.vw_total_exoplanets_by_molecule AS
+CREATE OR REPLACE VIEW exoplanet.vw_total_exoplanets_by_molecule AS
 SELECT 
 	UNNEST(STRING_TO_ARRAY(TRIM(molecules),', '))
 	AS molecule

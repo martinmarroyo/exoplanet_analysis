@@ -1,4 +1,4 @@
-CREATE MATERIALIZED VIEW exoplanet.vw_current_star_detail AS 
+CREATE MATERIALIZED VIEW IF NOT EXISTS exoplanet.vw_current_star_detail AS 
 SELECT DISTINCT
 	dim_star.star_key
 	,dim_star.star_name

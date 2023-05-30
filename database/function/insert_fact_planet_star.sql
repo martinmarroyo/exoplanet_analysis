@@ -158,7 +158,7 @@ WITH facts AS (
 		,fact_planet_star.star_teff_error_max
 		,NOW()::DATE AS row_entry_date
 	FROM
-		exoplanet.exoplanet_data fact_planet_star
+		exoplanet.raw_exoplanet_data fact_planet_star
 	INNER JOIN (
 		SELECT planet_name,planet_key
 		FROM exoplanet.dim_planet
@@ -175,11 +175,11 @@ WITH facts AS (
 		SELECT date,date_key
 		FROM exoplanet.dim_day
 	)dim_day
-	ON COALESCE(fact_planet_star.updated,'1000-12-31')=dim_day.date
+	ON COALESCE(fact_planet_star.updated,'1000-12-31')::DATE=dim_day.date
 	-- Only get the current data load
 	WHERE
-		fact_planet_star.updated = (SELECT MAX(updated::DATE)
-								    FROM exoplanet.exoplanet_data)
+		fact_planet_star.updated::DATE = (SELECT MAX(updated::DATE)
+								    FROM exoplanet.raw_exoplanet_data)
 )
 INSERT INTO exoplanet.fact_planet_star(
 	planet_key, star_key, date_key, planet_mass, 

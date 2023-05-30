@@ -1,4 +1,4 @@
-CREATE VIEW exoplanet.vw_exoplanet_status_overview AS
+CREATE OR REPLACE VIEW exoplanet.vw_exoplanet_status_overview AS
 SELECT planet_status,COUNT(planet_name) AS total_planets
 FROM exoplanet.dim_planet
 WHERE row_current AND planet_status IS NOT NULL

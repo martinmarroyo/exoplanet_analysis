@@ -11,19 +11,9 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
-# Load environment variables
-logging.basicConfig(
-    handlers=[
-        logging.FileHandler("etl/logs/exoplanet.log"),
-        logging.StreamHandler(sys.stdout)
-    ],
-    encoding="UTF-8",
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-)
-logging.StreamHandler(sys.stdout)
 
-def get_driver(download_path:str):
+
+def get_driver(download_path):
     """Creates and returns a Selenium driver based on our required config"""
     # Set download directory & initiate headless browser
     options = webdriver.ChromeOptions()
@@ -36,7 +26,7 @@ def get_driver(download_path:str):
     return driver
 
 
-def get_remote_driver(download_path:str):
+def get_remote_driver(download_path):
     """Gets a remote Selenium driver (used for Docker)"""
     # Set download directory & initiate headless browser
     options = webdriver.ChromeOptions()
@@ -50,10 +40,10 @@ def get_remote_driver(download_path:str):
     return driver
 
 
-def download_data(driver, url:str):
+def download_data(driver, url):
     """Filters the Exoplanet data and downloads it to our preferred location"""
     try:
-        logging.info("Getting CSV file")
+        print("Getting CSV file")
         # Get data page, check all options, & download CSV
         driver.get(url)
         data_filter = driver.find_element(By.CSS_SELECTOR, ".filter_catalog_form")
@@ -69,7 +59,7 @@ def download_data(driver, url:str):
             .perform()
         )
         # Wait a few seconds before closing
-        logging.info("File has been downloaded")
+        print("File has been downloaded")
         sleep(3)
         driver.close()
         driver.quit()
@@ -78,7 +68,7 @@ def download_data(driver, url:str):
         raise
         
 
-def ingest(download_path:str, url:str):
+def ingest(download_path, url):
     """Ingests data from the Extrasolar Planet Encyclopaedia"""
     # Get the driver
     driver = get_driver(download_path)

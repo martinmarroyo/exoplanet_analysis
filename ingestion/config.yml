@@ -7,3 +7,4 @@ USER: citizen_scientist
 PASS: reachforthestars
 PORT: 5432
 DB_NAME: exoplanet
+HOST: db2

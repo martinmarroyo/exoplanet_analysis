@@ -136,3 +136,5 @@ dmypy.json
 etl/logs/*.log
 venv
 venv/*
+
+ingestion/raw_data

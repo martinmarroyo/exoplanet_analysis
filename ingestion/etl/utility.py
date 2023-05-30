@@ -1,7 +1,7 @@
 """Utility functions to support Exoplanet ETL"""
 import os
 import sys
-import logging
+from loguru import logger
 from time import sleep
 
 def check_for_file(path:str, tries:int=5, wait_time:int=60):
@@ -12,9 +12,9 @@ def check_for_file(path:str, tries:int=5, wait_time:int=60):
         TRIES -= 1
     
     if TRIES == 0:
-        print("The file took longer than 5 minutes to download.")
+        logger.info("The file took longer than 5 minutes to download.")
         return False
-    print("The file was found!")
+    logger.info("The file was found!")
     return True
 
 
@@ -22,7 +22,7 @@ def delete_file(path:str):
     """Deletes the file at the given path"""
     try:
         os.remove(path)
-        print("CSV file has been removed")
+        logger.info("CSV file has been removed")
     except Exception as e:
-        logging.exception("Error occurred while trying to remove CSV file")
+        logger.exception("Error occurred while trying to remove CSV file")
 

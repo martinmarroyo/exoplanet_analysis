@@ -1,16 +1,14 @@
 """A collection of functions that handle loading Exoplanet data into the database"""
 import sqlalchemy as sql
 import pandas as pd
-import logging
+from loguru import logger
 import sys
 
 # Get the latest updates & load into database
 # Get data from path into dataframe
 def load_raw_data(path:str):
     """Loads the data from the given path into a DataFrame"""
-    print(f"Path: {path}")
     exoplanet_data = pd.read_csv(path)
-    print(exoplanet_data["updated"][0])
     exoplanet_data = exoplanet_data.rename(columns={"# name": "planet_name"})
     exoplanet_data["updated"] = pd.to_datetime(exoplanet_data["updated"]).apply(
         lambda row: row.date()
@@ -37,14 +35,14 @@ def check_if_update(engine, data:pd.DataFrame):
         return latest_in_raw > latest_in_db
     except Exception:
         # This catches the error thrown when writing the first insert to the database
-        print("This is the initial loading of the data")
+        logger.info("This is the initial loading of the data")
         return True
 
 def write_to_db(engine, data:pd.DataFrame):
     """Writes data to the database using the given engine"""
     # Insert data into exoplanet.exoplanet_data table 
     has_update = check_if_update(engine, data)
-    print(f"Update found: {has_update}")
+    logger.info(f"Update found: {has_update}")
     if has_update:
         try:
             with engine.begin() as conn:
@@ -57,7 +55,7 @@ def write_to_db(engine, data:pd.DataFrame):
                     chunksize=1000,
                     method="multi",
                 )
-                print("New data has been inserted")
+                logger.info("New data has been inserted")
                 # Update dim and fact tables, refresh views
                 conn.execute(sql.text("SELECT exoplanet.update_dim_planet();"))
                 conn.execute(sql.text("SELECT exoplanet.update_dim_star();"))
@@ -68,12 +66,12 @@ def write_to_db(engine, data:pd.DataFrame):
                 conn.execute(
                     sql.text("REFRESH MATERIALIZED VIEW exoplanet.vw_current_exoplanet_detail;")
                 )
-                print("Dimension and fact tables have been updated")
+                logger.info("Dimension and fact tables have been updated")
                 return 0
         except Exception as err:
-            logging.exception("Error occurred while inserting to db")
+            logger.exception("Error occurred while inserting to db")
             raise
-    print("No new records found in raw data")
+    logger.info("No new records found in raw data")
     return 0
     
 

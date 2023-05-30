@@ -3,7 +3,7 @@ Functions that handle ingesting data from the Exoplanet Catalog
 @Author: Martin Arroyo
 """
 import sys
-import logging
+from loguru import logger
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
@@ -43,7 +43,7 @@ def get_remote_driver(download_path):
 def download_data(driver, url):
     """Filters the Exoplanet data and downloads it to our preferred location"""
     try:
-        print("Getting CSV file")
+        logger.info("Getting CSV file")
         # Get data page, check all options, & download CSV
         driver.get(url)
         data_filter = driver.find_element(By.CSS_SELECTOR, ".filter_catalog_form")
@@ -59,12 +59,12 @@ def download_data(driver, url):
             .perform()
         )
         # Wait a few seconds before closing
-        print("File has been downloaded")
+        logger.info("File has been downloaded")
         sleep(3)
         driver.close()
         driver.quit()
     except Exception as e:
-        logging.exception("Error occurred while generating web driver")
+        logger.exception("Error occurred while generating web driver")
         raise
         
 
